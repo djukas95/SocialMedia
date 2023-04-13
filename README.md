@@ -1,16 +1,23 @@
 # flaskyi
 
-# First step: 
- - create VENV: python -m venv venv
+# Create **venv**
+## Windows
+ > python -m venv venv
+## Linux/MacOS
+ > python3 -m venv venv
 
-# Second step: 
- - venv\Scripts\activate
+# Activate **venv** 
+## Windows
+ > venv\Scripts\activate
 
-# Third step:
- - pip install -r requirements.txt
+## Linux/MacOS
+ > source venv/bin/activate
 
-# Fourth step:
- -  set FLASK_APP=app.py
+# Install requirements
+ > pip install -r requirements.txt
 
-# Fifth step: 
- - flask run
+# Set FLASK_APP
+ > set FLASK_APP=app.py
+
+# Run app 
+ > flask run

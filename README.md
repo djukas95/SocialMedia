@@ -1,4 +1,4 @@
-# flaskyi
+# flasky
 
 # Create **venv**
 ## Windows

@@ -28,7 +28,7 @@ def index():
             cur = mysql.connection.cursor()
             username = request.form.get('username')
             password = request.form.get('password')
-            if cur.execute("SELECT * from USER where Username = %s and Password = %s", [username, password]) > 0:
+            if cur.execute("SELECT * from User where username = %s and password = %s", [username, password]) > 0:
                 user = cur.fetchone()
                 # print(user)
                 session['login'] = True
@@ -36,10 +36,10 @@ def index():
                 session['firstName'] = user[4]
                 session['lastName'] = user[5]
                 mysql.connection.commit()
-                cur.execute("UPDATE user SET active = 1 WHERE username = %s ", [username])
+                cur.execute("UPDATE User SET active = 1 WHERE username = %s ", [username])
                 mysql.connection.commit()
                 # fetch all active users or online users
-                result_value = cur.execute("SELECT * from user WHERE active = 1 and username not in (%s)", [username])
+                result_value = cur.execute("SELECT * from User WHERE active = 1 and username not in (%s)", [username])
                 if result_value > 0:
                     users = cur.fetchall()
                     # print(users)
@@ -53,7 +53,7 @@ def index():
     else:
         if session.get('username') is not None:
             cur = mysql.connection.cursor()
-            result_value = cur.execute("SELECT * from user WHERE active = 1 and username not in (%s)", [session['username']])
+            result_value = cur.execute("SELECT * from User WHERE active = 1 and username not in (%s)", [session['username']])
             if result_value > 0:
                 users = cur.fetchall()
                 return render_template("home.html", users=users)
@@ -66,7 +66,7 @@ def index():
 def logout():
     if session.get('username') is not None:
         cur = mysql.connection.cursor()
-        cur.execute("UPDATE user SET active = 0 WHERE username = %s ", [session['username']])
+        cur.execute("UPDATE User SET active = 0 WHERE username = %s ", [session['username']])
         mysql.connection.commit()
         session.pop('username')
         return render_template('index.html')
@@ -93,8 +93,8 @@ def registration():
         email = request.form.get('email')
         password_confirm = request.form.get('passwordConfirm')
         if password == password_confirm:
-            if (cur.execute("SELECT * from USER where Username = %s", [username]) == 0) and len(username) >= 5:
-                if cur.execute("SELECT * from USER where Email = %s", [email]) == 0:
+            if (cur.execute("SELECT * from User where username = %s", [username]) == 0) and len(username) >= 5:
+                if cur.execute("SELECT * from User where email = %s", [email]) == 0:
                     cur.execute("INSERT INTO User(firstname,lastname,email,password,username) VALUES (%s,%s,%s,%s,%s)", [firstname, lastname, email, password, username])
                     mysql.connection.commit()
                     cur.close()

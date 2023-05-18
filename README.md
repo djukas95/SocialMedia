@@ -1,23 +1,22 @@
-# flasky
+# Social Media - Flask app
 
-# Create **venv**
-## Windows
- > python -m venv venv
-## Linux/MacOS
- > python3 -m venv venv
+## Create **venv**
+### Windows
+    python -m venv venv
+### Linux/MacOS
+    python3 -m venv venv
 
-# Activate **venv** 
-## Windows
- > venv\Scripts\activate
+## Activate **venv** 
+### Windows
+    venv\Scripts\activate
+### Linux/MacOS
+    source venv/bin/activate
 
-## Linux/MacOS
- > source venv/bin/activate
+## Install requirements
+    pip install -r requirements.txt
 
-# Install requirements
- > pip install -r requirements.txt
+## Set FLASK_APP
+    set FLASK_APP=app.py
 
-# Set FLASK_APP
- > set FLASK_APP=app.py
-
-# Run app 
- > flask run
+## Run app 
+    flask run

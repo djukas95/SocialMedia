@@ -113,8 +113,4 @@ def registration():
 
 
 if __name__ == '__main__':
-    # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    # context.load_cert_chain("ca.crt", "ca.key")
-    # serving.run_simple("0.0.0.0", 8000, app, ssl_context=context)
     serving.run_simple("0.0.0.0", 8000, app)
-    # app.run(host='192.168.100.7', port=5010)

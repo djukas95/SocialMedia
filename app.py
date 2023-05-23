@@ -1,11 +1,8 @@
-import ssl
-
 from flask import Flask, render_template, request, session
 import flask_bootstrap
 import flask
 from flask_mysqldb import MySQL
 import yaml
-from werkzeug import serving
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -32,7 +29,7 @@ def index():
                 user = cur.fetchone()
                 # print(user)
                 session['login'] = True
-                session['username'] = user[2]
+                session['username'] = user[6]
                 session['firstName'] = user[4]
                 session['lastName'] = user[5]
                 mysql.connection.commit()
@@ -98,7 +95,7 @@ def registration():
                     cur.execute("INSERT INTO User(firstname,lastname,email,password,username) VALUES (%s,%s,%s,%s,%s)", [firstname, lastname, email, password, username])
                     mysql.connection.commit()
                     cur.close()
-                    return render_template("login.html")
+                    return redirect(url_for('index'))
                 else:
                     flask.flash('Email exists!', 'danger')
                     return render_template("registration.html")

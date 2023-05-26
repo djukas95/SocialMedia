@@ -18,7 +18,7 @@ USE `mydb` ;
 -- Table `mydb`.`Blog`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`BLOG` (
-  `idBlog` INT NOT NULL,
+  `idBlog` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(255) NOT NULL,
   `body` VARCHAR(5000) NOT NULL,
   `author` VARCHAR(50) NOT NULL,

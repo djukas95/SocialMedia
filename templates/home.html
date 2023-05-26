@@ -29,12 +29,12 @@
         {% for blog in blogs %}
         <div class="col mb-3">
           <div class="card">
-            <img src="https://www.schemecolor.com/wallpaper?i=15542&desktop" alt="Cover" class="card-img-top" style="height: 150px">
+            <img src="{{ blog[4] }}" alt="Cover" class="card-img-top" style="height: 150px">
             <div class="card-body text-center">
-              <img src="https://bootdey.com/img/Content/avatar/avatar7.png" style="width:100px;margin-top:-65px" alt="User" class="img-fluid img-thumbnail rounded-circle border-0 mb-3">
               <h5 class="card-title">{{ blog[1] }}</h5>
               <p class="text-secondary mb-1">{{ blog[2] }}</p>
-              <p class="text-muted font-size-sm">{{ blog[3] }}</p>
+              <p class="font-weight-bold font-size-sm">Author: {{ blog[3] }}</p>
+              <a href="{{ url_for('blog', id=blog[0]) }}" class="btn btn-log btn-lg btn-block btn-success">Read</a>
             </div>
 
           </div>

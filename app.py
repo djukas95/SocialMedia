@@ -39,13 +39,17 @@ def index():
                 result_value = cur.execute("SELECT * from Blog")
                 if result_value > 0:
                     blogs = cur.fetchall()
-                    # print(users)
                     return render_template("home.html", blogs=blogs)
                 return render_template("home.html")
             else:
                 flask.flash('Invalid username and password!', 'danger')
                 return render_template('login.html')
         else:
+            cur = mysql.connection.cursor()
+            result_value = cur.execute("SELECT * from Blog")
+            if result_value > 0:
+                blogs = cur.fetchall()
+                return render_template("home.html", blogs=blogs)
             return render_template("home.html")
     else:
         if session.get('username') is not None:
@@ -76,6 +80,24 @@ def home():
     if session.get('username') is None:
         return render_template("index.html")
     else:
+        cur = mysql.connection.cursor()
+        result_value = cur.execute("SELECT * from Blog")
+        if result_value > 0:
+            blogs = cur.fetchall()
+            return render_template("home.html", blogs=blogs)
+        return render_template("home.html")
+
+
+@app.route('/blog/<int:id>')
+def blog(id):
+    if session.get('username') is None:
+        return render_template("index.html")
+    else:
+        cur = mysql.connection.cursor()
+        result_value = cur.execute("SELECT * from Blog WHERE idBlog = %s ", [id])
+        if result_value > 0:
+            b = cur.fetchone()
+            return render_template("blog.html", blog=b)
         return render_template("home.html")
 
 
@@ -92,7 +114,8 @@ def registration():
         if password == password_confirm:
             if (cur.execute("SELECT * from User where username = %s", [username]) == 0) and len(username) >= 5:
                 if cur.execute("SELECT * from User where email = %s", [email]) == 0:
-                    cur.execute("INSERT INTO User(firstname,lastname,email,password,username) VALUES (%s,%s,%s,%s,%s)", [firstname, lastname, email, password, username])
+                    cur.execute("INSERT INTO User(firstname,lastname,email,password,username) VALUES (%s,%s,%s,%s,%s)",
+                                [firstname, lastname, email, password, username])
                     mysql.connection.commit()
                     cur.close()
                     flask.flash('Registration successful! Please login.', 'success')
@@ -107,4 +130,3 @@ def registration():
             flask.flash('Password error!')
             return render_template("registration.html")
     return render_template("registration.html")
-

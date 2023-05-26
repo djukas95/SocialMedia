@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`BLOG` (
   `title` VARCHAR(255) NOT NULL,
   `body` VARCHAR(5000) NOT NULL,
   `author` VARCHAR(50) NOT NULL,
+  `picture` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`idBlog`))
 ENGINE = InnoDB;
 

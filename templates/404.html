@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='11-512.webp') }}" type="image/x-icon">
+    <title>Page Not Found</title>
+  </head>
+  <body style="background-color: white;">
+  <div class="error-404">
+    <div class="error-code m-b-10 m-t-20">404 <i class="fa fa-warning"></i></div>
+    <h2 class="font-bold">Oops 404! That page can’t be found.</h2>
+
+      <div class="error-desc">
+        Sorry, but the page you are looking for was either not found or does not exist. <br/>
+        Try refreshing the page or click the button below to go back to the Homepage.
+        <div><br/>
+            <!-- <a class=" login-detail-panel-button btn" href="http://vultus.de/"> -->
+            <a href="/" class="btn btn-log btn-success"><span class="glyphicon glyphicon-home"></span> Go back to Homepage</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

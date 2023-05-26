@@ -88,19 +88,6 @@ def home():
         return render_template("home.html")
 
 
-@app.route('/blog/<int:id>')
-def blog(id):
-    if session.get('username') is None:
-        return render_template("index.html")
-    else:
-        cur = mysql.connection.cursor()
-        result_value = cur.execute("SELECT * from Blog WHERE idBlog = %s ", [id])
-        if result_value > 0:
-            b = cur.fetchone()
-            return render_template("blog.html", blog=b)
-        return render_template("home.html")
-
-
 @app.route('/registration/', methods=['GET', 'POST'])
 def registration():
     if request.method == 'POST':
@@ -130,3 +117,38 @@ def registration():
             flask.flash('Password error!')
             return render_template("registration.html")
     return render_template("registration.html")
+
+
+@app.route('/blog/<int:id>')
+def blog(id):
+    if session.get('username') is None:
+        return render_template("index.html")
+    else:
+        cur = mysql.connection.cursor()
+        result_value = cur.execute("SELECT * from Blog WHERE idBlog = %s ", [id])
+        if result_value > 0:
+            b = cur.fetchone()
+            return render_template("blog.html", blog=b)
+        return render_template("home.html")
+
+
+@app.route('/blog/', methods=['GET', 'POST'])
+def create_blog():
+    if request.method == 'POST':
+        cur = mysql.connection.cursor()
+        title = request.form.get('title')
+        body = request.form.get('body')
+        author = session.get('firstName') + ' ' + session.get('lastName')
+        picture = request.form.get('picture')
+        cur.execute("INSERT INTO Blog(title,body,author,picture) VALUES (%s,%s,%s,%s)",
+                    [title, body, author, picture])
+        mysql.connection.commit()
+        cur.close()
+        flask.flash('Blog created!', 'success')
+        return redirect(url_for('home'))
+    else:
+        return render_template("createBlog.html")
+
+@app.errorhandler(404)
+def invalid_route(e):
+    return render_template("404.html")

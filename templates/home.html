@@ -15,7 +15,7 @@
       <div class="text-white text-center rgba-stylish-strong py-5 px-4">
         <div class="py-5">
           <!-- Content -->
-          <h1 class="card-title h1 my-4 py-2" style="font-size: 60px">Chat Controller</h1>
+          <h1 class="card-title h1 my-4 py-2" style="font-size: 60px">Blog</h1>
         </div>
       </div>
     </div>
@@ -26,19 +26,17 @@
       <div class="main-body">
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 gutters-sm">
-        {% for user in users %}
+        {% for blog in blogs %}
         <div class="col mb-3">
           <div class="card">
             <img src="https://www.schemecolor.com/wallpaper?i=15542&desktop" alt="Cover" class="card-img-top" style="height: 150px">
             <div class="card-body text-center">
               <img src="https://bootdey.com/img/Content/avatar/avatar7.png" style="width:100px;margin-top:-65px" alt="User" class="img-fluid img-thumbnail rounded-circle border-0 mb-3">
-              <h5 class="card-title">{{ user[2] }}</h5>
-              <p class="text-secondary mb-1">{{ user[3] + ' ' + user[4]}}</p>
-              <p class="text-muted font-size-sm">{{ user[6] }}</p>
+              <h5 class="card-title">{{ blog[1] }}</h5>
+              <p class="text-secondary mb-1">{{ blog[2] }}</p>
+              <p class="text-muted font-size-sm">{{ blog[3] }}</p>
             </div>
-            <div class="card-footer">
-              <button class="btn btn-light btn-sm bg-white has-icon btn-block" type="button">Message</button>
-            </div>
+
           </div>
         </div>
         {% endfor %}

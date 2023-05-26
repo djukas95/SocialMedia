@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, url_for
 import flask_bootstrap
 import flask
 from flask_mysqldb import MySQL
@@ -35,12 +35,12 @@ def index():
                 mysql.connection.commit()
                 cur.execute("UPDATE User SET active = 1 WHERE username = %s ", [username])
                 mysql.connection.commit()
-                # fetch all active users or online users
-                result_value = cur.execute("SELECT * from User WHERE active = 1 and username not in (%s)", [username])
+                # fetch all blogs
+                result_value = cur.execute("SELECT * from Blog")
                 if result_value > 0:
-                    users = cur.fetchall()
+                    blogs = cur.fetchall()
                     # print(users)
-                    return render_template("home.html", users=users)
+                    return render_template("home.html", blogs=blogs)
                 return render_template("home.html")
             else:
                 flask.flash('Invalid username and password!', 'danger')
@@ -50,10 +50,10 @@ def index():
     else:
         if session.get('username') is not None:
             cur = mysql.connection.cursor()
-            result_value = cur.execute("SELECT * from User WHERE active = 1 and username not in (%s)", [session['username']])
+            result_value = cur.execute("SELECT * from Blog")
             if result_value > 0:
-                users = cur.fetchall()
-                return render_template("home.html", users=users)
+                blogs = cur.fetchall()
+                return render_template("home.html", blogs=blogs)
         else:
             return render_template("login.html")
     return render_template("login.html")
@@ -95,6 +95,7 @@ def registration():
                     cur.execute("INSERT INTO User(firstname,lastname,email,password,username) VALUES (%s,%s,%s,%s,%s)", [firstname, lastname, email, password, username])
                     mysql.connection.commit()
                     cur.close()
+                    flask.flash('Registration successful! Please login.', 'success')
                     return redirect(url_for('index'))
                 else:
                     flask.flash('Email exists!', 'danger')
@@ -105,9 +106,5 @@ def registration():
         else:
             flask.flash('Password error!')
             return render_template("registration.html")
-        flask.flash('Registration successful! Please login.', 'success')
     return render_template("registration.html")
 
-
-if __name__ == '__main__':
-    serving.run_simple("0.0.0.0", 8000, app)

@@ -3,6 +3,7 @@ import flask_bootstrap
 import flask
 from flask_mysqldb import MySQL
 import yaml
+from passlib.hash import sha256_crypt
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -25,22 +26,26 @@ def index():
             cur = mysql.connection.cursor()
             username = request.form.get('username')
             password = request.form.get('password')
-            if cur.execute("SELECT * from User where username = %s and password = %s", [username, password]) > 0:
+            if cur.execute("SELECT * from User where username = %s", [username]) > 0:
                 user = cur.fetchone()
-                # print(user)
-                session['login'] = True
-                session['username'] = user[6]
-                session['firstName'] = user[4]
-                session['lastName'] = user[5]
-                mysql.connection.commit()
-                cur.execute("UPDATE User SET active = 1 WHERE username = %s ", [username])
-                mysql.connection.commit()
-                # fetch all blogs
-                result_value = cur.execute("SELECT * from Blog")
-                if result_value > 0:
-                    blogs = cur.fetchall()
-                    return render_template("home.html", blogs=blogs)
-                return render_template("home.html")
+                if sha256_crypt.verify(password, user[3]):
+                    # print(user)
+                    session['login'] = True
+                    session['username'] = user[6]
+                    session['firstName'] = user[4]
+                    session['lastName'] = user[5]
+                    mysql.connection.commit()
+                    cur.execute("UPDATE User SET active = 1 WHERE username = %s ", [username])
+                    mysql.connection.commit()
+                    # fetch all blogs
+                    result_value = cur.execute("SELECT * from Blog")
+                    if result_value > 0:
+                        blogs = cur.fetchall()
+                        return render_template("home.html", blogs=blogs)
+                    return render_template("home.html")
+                else:
+                    flask.flash('Invalid username and password!', 'danger')
+                    return render_template('login.html')
             else:
                 flask.flash('Invalid username and password!', 'danger')
                 return render_template('login.html')
@@ -98,11 +103,12 @@ def registration():
         lastname = request.form.get('lastname')
         email = request.form.get('email')
         password_confirm = request.form.get('passwordConfirm')
+        password_hash = sha256_crypt.hash(password)
         if password == password_confirm:
-            if (cur.execute("SELECT * from User where username = %s", [username]) == 0) and len(username) >= 5:
+            if cur.execute("SELECT * from User where username = %s", [username]) == 0:
                 if cur.execute("SELECT * from User where email = %s", [email]) == 0:
                     cur.execute("INSERT INTO User(firstname,lastname,email,password,username) VALUES (%s,%s,%s,%s,%s)",
-                                [firstname, lastname, email, password, username])
+                                [firstname, lastname, email, password_hash, username])
                     mysql.connection.commit()
                     cur.close()
                     flask.flash('Registration successful! Please login.', 'success')
@@ -148,6 +154,7 @@ def create_blog():
         return redirect(url_for('home'))
     else:
         return render_template("createBlog.html")
+
 
 @app.errorhandler(404)
 def invalid_route(e):
